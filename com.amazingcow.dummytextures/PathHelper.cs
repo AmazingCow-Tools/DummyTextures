@@ -2,7 +2,7 @@
 //               █      █                                                     //
 //               ████████                                                     //
 //             ██        ██                                                   //
-//            ███  █  █  ███        Texture.cs                                //
+//            ███  █  █  ███        PathHelper.cs                             //
 //            █ █        █ █        dummy-textures                            //
 //             ████████████                                                   //
 //           █              █       Copyright (c) 2016                        //
@@ -37,62 +37,43 @@
 //                                                                            //
 //                                  Enjoy :)                                  //
 //----------------------------------------------------------------------------//
-
 //Usings
 using System;
-using System.Drawing;
 using System.IO;
 
 namespace com.amazingcow.dummytextures
 {
-    public class Texture 
+    public static class PathHelper
     {
-        // iVars //
-        private int   m_width;
-        private int   m_height;
-        private Color m_color;
-        private int   m_id;
-
-
-        // CTOR // 
-        public Texture(int width, int height, Color color, int id)
-        {            
-            m_width  = width;
-            m_height = height;
-            m_color  = color;
-            m_id     = id;
-        }
-
-
         // Public Methods //
-        public void SaveToFile(String folderPath)
+        public static String Canonize(String path)
         {
-            var fullpath = Path.Combine(
-                folderPath,
-                m_id.ToString()
-            );
-            fullpath = Path.ChangeExtension(fullpath, "png");
-            fullpath = PathHelper.Canonize(fullpath);
-
-            using(var bitmap = new Bitmap(m_width, m_height))
+            var indexOfTilde = path.IndexOf("~/");
+            if(indexOfTilde != -1)
             {
-                using(var graphics = Graphics.FromImage(bitmap))
-                {
-                    using(var brush = new SolidBrush(m_color))
-                    {
-                        var rect = new Rectangle(0, 0, m_width, m_height);
-                        graphics.FillRectangle(brush, rect);
-                    }
-                }
-
-                bitmap.Save(
-                    fullpath, 
-                    System.Drawing.Imaging.ImageFormat.Png
-                );
+                var homePath = GetHomeDirectory() + "/";
+                path = path.Replace("~/", homePath);
             }
+
+            return Path.GetFullPath(path);
         }
 
-    }// class Texture
+
+        // Helper Methods //
+        private static String GetHomeDirectory()
+        {
+            var homePath = Environment.GetEnvironmentVariable("HOME");
+
+            if(String.IsNullOrEmpty(homePath))
+            {
+                var msg = "Couldn't retrieve the HOME env var.";
+                throw new InvalidOperationException(msg);
+            }
+
+            return homePath;
+        }
+    
+    }// class PathHelper
 
 }// namespace com.amazingcow.dummytextures
 

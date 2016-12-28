@@ -37,6 +37,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Texture.cs" />
+    <Compile Include="CmdParser.cs" />
+    <Compile Include="RunOptions.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="PathHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
