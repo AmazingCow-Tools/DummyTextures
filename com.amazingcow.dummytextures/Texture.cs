@@ -41,6 +41,7 @@
 //Usings
 using System;
 using System.Drawing;
+using System.Drawing.Text;
 using System.IO;
 
 namespace com.amazingcow.dummytextures
@@ -74,6 +75,8 @@ namespace com.amazingcow.dummytextures
             fullpath = Path.ChangeExtension(fullpath, "png");
             fullpath = PathHelper.Canonize(fullpath);
 
+            Font f = new Font(FontFamily.GenericMonospace, 20);
+
             using(var bitmap = new Bitmap(m_width, m_height))
             {
                 using(var graphics = Graphics.FromImage(bitmap))
@@ -82,6 +85,13 @@ namespace com.amazingcow.dummytextures
                     {
                         var rect = new Rectangle(0, 0, m_width, m_height);
                         graphics.FillRectangle(brush, rect);
+
+                        graphics.DrawString(
+                            m_id.ToString(),
+                            f, 
+                            new SolidBrush(Color.Black),
+                            new RectangleF(0, 0, m_width, m_height)                            
+                        );
                     }
                 }
 
